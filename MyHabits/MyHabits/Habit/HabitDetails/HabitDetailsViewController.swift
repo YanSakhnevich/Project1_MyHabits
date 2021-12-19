@@ -36,20 +36,24 @@ class HabitDetailsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
     // MARK: - Functions
     // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
         editHabitViewController.delegatorForCalls = self
         
         view.backgroundColor = .systemGray6
         habitDetailTableView.backgroundColor = .systemGray6
-        title = habit.name
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Править", style: .plain, target: self, action: #selector(editThisHabit))
         navigationController?.navigationBar.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
+        navigationItem.largeTitleDisplayMode = .never
+
 
 
        
@@ -65,12 +69,7 @@ class HabitDetailsViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-    // View wil appear
-    override func viewWillAppear(_ animated: Bool) {
-        
-        navigationController?.navigationBar.prefersLargeTitles = false
-    }
-    
+
     // Little crutch for close current view when habit was deleted
     private func checkingForDeleting() {
         
@@ -88,7 +87,7 @@ class HabitDetailsViewController: UIViewController {
 
         editHabitViewController.modalPresentationStyle = .overFullScreen
         navigationController?.pushViewController(editHabitViewController, animated: true)
-        editHabitViewController.dataDelegator = self
+//        editHabitViewController.delegatorForHabit = self
         
     }
     

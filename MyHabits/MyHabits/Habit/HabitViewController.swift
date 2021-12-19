@@ -19,12 +19,15 @@ class HabitViewController: UIViewController {
     init (habit: Habit?) {
         super.init(nibName: nil, bundle: nil)
         self.habit = habit
+        setupNavBar()
+
         
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     // MARK: - Content
     // Name Label
@@ -130,9 +133,9 @@ class HabitViewController: UIViewController {
         
         newHabitNameTextField.delegate = self
         
-        
-        setupNavBar()
-        
+        navigationItem.largeTitleDisplayMode = .never
+
+
         
         setupViews()
         
@@ -198,7 +201,6 @@ class HabitViewController: UIViewController {
         navBarAppearance.configureWithOpaqueBackground()
         navBarAppearance.backgroundColor = .init(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.backgroundColor = .white
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(saveTabBarButtonPressed))
@@ -207,7 +209,6 @@ class HabitViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelTabBarButtonPressed))
         navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
-        navigationController?.navigationBar.prefersLargeTitles = false
         
         view.backgroundColor = .white
         title = "Создать"
@@ -240,8 +241,6 @@ class HabitViewController: UIViewController {
         
         navigationController?.popViewController(animated: true)
         self.dataDelegator?.updateCollection()
-
-
     }
     
     // Opening color picker

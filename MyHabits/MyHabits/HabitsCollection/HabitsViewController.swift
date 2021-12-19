@@ -4,6 +4,14 @@ class HabitsViewController: UIViewController {
     
     private var habitDetailsViewController: HabitDetailsViewController?
     
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//
+//        navigationController?.navigationBar.prefersLargeTitles = true
+//        collectionView.reloadData()
+//    }
+    
     // MARK: - Content
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -16,6 +24,7 @@ class HabitsViewController: UIViewController {
         
         collectionView.dataSource = self
         collectionView.delegate = self
+
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -35,6 +44,8 @@ class HabitsViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showCreateNewHabitViewControllerModaly))
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
+        navigationItem.largeTitleDisplayMode = .always
+
         
         view.backgroundColor = .white
         title = "Сегодня"
@@ -56,10 +67,10 @@ class HabitsViewController: UIViewController {
     @objc func showCreateNewHabitViewControllerModaly() {
         
         let habitViewController = HabitViewController(habit: nil)
-//        present(habitViewController, animated: true)
         habitViewController.modalPresentationStyle = .overFullScreen
         navigationController?.pushViewController(habitViewController, animated: true)
         habitViewController.dataDelegator = self
+        
     }
 }
 
@@ -167,8 +178,12 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
             habitDetailsViewController = HabitDetailsViewController(habit: habit)
             
             if habitDetailsViewController != nil {
-                navigationController?.pushViewController(habitDetailsViewController!, animated: true)
-                habitDetailsViewController!.callerFromDetailToHabits = self
+                let habit = HabitsStore.shared.habits[indexPath.item]
+                let habitDetailsVc = HabitDetailsViewController(habit: habit)
+                habitDetailsVc.navigationItem.title = habit.name
+                habitDetailsVc.callerFromDetailToHabits = self
+                navigationController?.pushViewController(habitDetailsVc, animated: true)
+
             }
         }
     }

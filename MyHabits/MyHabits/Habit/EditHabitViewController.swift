@@ -5,7 +5,7 @@ class EditHabitViewController: UIViewController {
     public var checkerForDeletingHabitWithStyle = false
     
     var delegatorForCalls: MakeACallFromEditToDetail?
-    weak var dataDelegator: UpdatingCollectionDataDelegate?
+    weak var delegatorForHabit: UpdatingCollectionDataDelegate?
 
     public var habit: Habit
     
@@ -14,6 +14,8 @@ class EditHabitViewController: UIViewController {
         
         self.habit = habit
         super.init(nibName: nil, bundle: nil)
+        setupNavBar()
+
     }
     
     required init?(coder: NSCoder) {
@@ -136,6 +138,8 @@ class EditHabitViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.largeTitleDisplayMode = .never
+
         checkerForDeletingHabitWithStyle = false
         
         view.backgroundColor = .white
@@ -149,7 +153,6 @@ class EditHabitViewController: UIViewController {
         newHabitTimeDatePicker.date = habit.date
 
         setupViews()
-        setupNavBar()
     }
     
     // Setup views
@@ -203,30 +206,11 @@ class EditHabitViewController: UIViewController {
     
     // Setup navigation bar
     private func setupNavBar() {
-//        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
-//        view.addSubview(navBar)
-//
-//        let navItem = UINavigationItem(title: "Создать")
-//
-//        let saveItem = UIBarButtonItem(title: "Править", style: .plain, target: self, action: #selector(saveTabBarButtonPressed))
-//        saveItem.tintColor = .purple
-//        let cancelItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelTabBarButtonPressed))
-//        cancelItem.tintColor = .purple
-//
-//        navItem.rightBarButtonItem = saveItem
-//        navItem.leftBarButtonItem = cancelItem
-//
-//        navBar.setItems([navItem], animated: true)
-        
-        
-
-        
         
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithOpaqueBackground()
         navBarAppearance.backgroundColor = .init(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.backgroundColor = .white
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(saveTabBarButtonPressed))
@@ -235,7 +219,6 @@ class EditHabitViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelTabBarButtonPressed))
         navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
-        navigationController?.navigationBar.prefersLargeTitles = false
 
         view.backgroundColor = .white
         title = "Править"
@@ -275,7 +258,7 @@ class EditHabitViewController: UIViewController {
         
 //        dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
-        self.dataDelegator?.updateCollection()
+        self.delegatorForHabit?.updateCollection()
     }
     
     // Opening color picker
@@ -310,13 +293,16 @@ class EditHabitViewController: UIViewController {
                 HabitsStore.shared.habits.remove(at: oldHabit )
             }
             self.navigationController?.popToRootViewController(animated: true)
-            self.dataDelegator?.updateCollection()
+            self.delegatorForHabit?.updateCollection()
             
             self.checkerForDeletingHabitWithStyle.toggle()
             
-            //            self.dismiss(animated: true) { [weak self] in
-            //                self?.delegatorForCalls?.makeACall()
-            //            }
+//            self.dismiss(animated: true) { [weak self] in
+//                self?.delegatorForCalls?.makeACall()
+//            }
+//            self.dismiss(animated: true, completion: { [weak self] in
+//                self?.delegatorForCalls?.makeACall()
+//            })
         }
         
         deleteAlertController.addAction(cancelDeleteAction)
