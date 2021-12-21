@@ -4,13 +4,9 @@ class HabitsViewController: UIViewController {
     
     private var habitDetailsViewController: HabitDetailsViewController?
     
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//
-//        navigationController?.navigationBar.prefersLargeTitles = true
-//        collectionView.reloadData()
-//    }
+    override func viewDidAppear(_ animated: Bool) {
+        collectionView.reloadData()
+    }
     
     // MARK: - Content
     private lazy var collectionView: UICollectionView = {
