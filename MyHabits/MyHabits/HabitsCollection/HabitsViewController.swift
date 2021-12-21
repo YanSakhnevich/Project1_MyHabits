@@ -13,14 +13,14 @@ class HabitsViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         
-        collectionView.backgroundColor = UIColor(named: "CustomWhite") ?? .white
+        collectionView.backgroundColor = customWhiteColor ?? .white
         
         collectionView.register(HabitCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: HabitCollectionViewCell.self))
         collectionView.register(ProgressCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: ProgressCollectionViewCell.self))
         
         collectionView.dataSource = self
         collectionView.delegate = self
-
+        
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -39,12 +39,12 @@ class HabitsViewController: UIViewController {
         navigationController?.navigationBar.backgroundColor = .white
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(showCreateNewHabitViewControllerModaly))
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
+        navigationItem.rightBarButtonItem?.tintColor = customPurpleColor ?? .systemPurple
         navigationItem.largeTitleDisplayMode = .always
-
+        
         
         view.backgroundColor = .white
-        title = "Сегодня"
+        title = habitsViewControllerTitle
         
         view.addSubview(collectionView)
         
@@ -99,16 +99,16 @@ extension HabitsViewController: UICollectionViewDataSource {
             
             progressCell.progressView.setProgress(HabitsStore.shared.todayProgress, animated: true)
             progressCell.progressPercentageLabel.text = "\(Int(HabitsStore.shared.todayProgress * 100))%"
-                        
+            
             return progressCell
             
         default:
             let habitCell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: HabitCollectionViewCell.self), for: indexPath) as! HabitCollectionViewCell
-        
+            
             let habit = HabitsStore.shared.habits[indexPath.row]
             
             habitCell.delegateHabitCell = self
-        
+            
             habitCell.habit = habit
             habitCell.habit = HabitsStore.shared.habits[indexPath.item]
             
@@ -117,7 +117,7 @@ extension HabitsViewController: UICollectionViewDataSource {
             } else {
                 habitCell.habitAchievedCheckboxButton.backgroundColor = .white
             }
-        
+            
             return habitCell
         }
     }
@@ -179,7 +179,7 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
                 habitDetailsVc.navigationItem.title = habit.name
                 habitDetailsVc.callerFromDetailToHabits = self
                 navigationController?.pushViewController(habitDetailsVc, animated: true)
-
+                
             }
         }
     }

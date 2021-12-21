@@ -1,12 +1,12 @@
 import UIKit
 
 class ProgressCollectionViewCell: UICollectionViewCell {
-      
+    
     // MARK: - Content
     // Label for motivational phrase
     private let progressTitleLabel: UILabel = {
         let progressTitleLabel = UILabel()
-        progressTitleLabel.text = "Всё получится!"
+        progressTitleLabel.text = progressTitleLabelText
         progressTitleLabel.font = .systemFont(ofSize: 13, weight: .semibold)
         progressTitleLabel.textColor = .systemGray
         

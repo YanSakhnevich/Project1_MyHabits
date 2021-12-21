@@ -130,10 +130,9 @@ class HabitCollectionViewCell: UICollectionViewCell {
         if habitAchievedCheckboxButton.isChecked {
             habitAchievedCheckboxButton.backgroundColor = habit?.color
             if habit?.isAlreadyTakenToday == true {
-                print("A habit is already tracked tooday")
             } else {
                 HabitsStore.shared.track(habit!)
-                print("User succesfuly tracked a habit")
+                
                 contentView.reloadInputViews()
                 
                 self.delegateHabitCell?.updateCollection()
@@ -141,7 +140,5 @@ class HabitCollectionViewCell: UICollectionViewCell {
         } else {
             habitAchievedCheckboxButton.backgroundColor = .white
         }
-        
     }
-    
 }

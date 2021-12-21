@@ -2,8 +2,25 @@ import UIKit
 
 class HabitDetailsViewController: UIViewController {
     
-        
+    
     var callerFromDetailToHabits: UpdatingCollectionDataDelegate?
+    
+    let habit: Habit
+    
+    // MARK: Initializations
+    init(habit: Habit) {
+        
+        self.habit = habit
+        super.init(nibName: nil, bundle: nil)
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private lazy var editHabitViewController = EditHabitViewController(habit: habit)
+    
     
     // MARK: - Content
     // Table view for habit's detail
@@ -20,43 +37,22 @@ class HabitDetailsViewController: UIViewController {
         return habitDetailTableView
     }()
     
-    private lazy var editHabitViewController = EditHabitViewController(habit: habit)
-    
-    let habit: Habit
-    
-    // MARK: Initializations
-    init(habit: Habit) {
-        
-        self.habit = habit
-        super.init(nibName: nil, bundle: nil)
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
     
     // MARK: - Functions
     // View did load
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
         editHabitViewController.delegatorForCalls = self
         
         view.backgroundColor = .systemGray6
         habitDetailTableView.backgroundColor = .systemGray6
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Править", style: .plain, target: self, action: #selector(editThisHabit))
-        navigationController?.navigationBar.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: editHabitViewControllerTitle, style: .plain, target: self, action: #selector(editThisHabit))
+        navigationController?.navigationBar.tintColor = customPurpleColor ?? .systemPurple
+        navigationItem.rightBarButtonItem?.tintColor = customPurpleColor ?? .systemPurple
         navigationItem.largeTitleDisplayMode = .never
-
-
-
-       
+        
         view.addSubview(habitDetailTableView)
         
         let constraints = [
@@ -69,7 +65,7 @@ class HabitDetailsViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     
-
+    
     // Little crutch for close current view when habit was deleted
     private func checkingForDeleting() {
         
@@ -82,15 +78,12 @@ class HabitDetailsViewController: UIViewController {
     // MARK: - Actions
     // Open editing view for this habit
     @objc func editThisHabit() {
-//        navigationController?.present(editHabitViewController, animated: true, completion: nil)
+        
         let editHabitViewController = EditHabitViewController(habit: habit)
-
+        
         editHabitViewController.modalPresentationStyle = .overFullScreen
         navigationController?.pushViewController(editHabitViewController, animated: true)
-//        editHabitViewController.delegatorForHabit = self
-        
     }
-    
 }
 
 // MARK: - Extensions

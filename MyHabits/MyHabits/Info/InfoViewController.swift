@@ -6,30 +6,30 @@ class InfoViewController: UIViewController {
     // ScrollView
     private let scrollView = UIScrollView()
     private let containerView = UIView()
-        
+    
     // Title of info
     private let textTitle: UILabel = {
         let textTitle = UILabel()
-        textTitle.text = "Привычка за 21 день"
+        textTitle.text = infoTextTitle
         textTitle.font = .boldSystemFont(ofSize: 24)
         textTitle.numberOfLines = 1
-    
+        
         return textTitle
     }()
     
     // Info header
     private let textHeader: UILabel = {
         let textHeader = UILabel()
-        textHeader.text = "Прохождение этапов, за которые за 21 день вырабатывается привычка, подчиняется следующему алгоритму:"
+        textHeader.text = infoTextHeader
         textHeader.numberOfLines = 0
-    
+        
         return textHeader
     }()
     
     // Info text (6 parts)
     private let textPartOne: UILabel = {
         let textPartOne = UILabel()
-        textPartOne.text = "1. Провести 1 день без обращения к старым привычкам, стараться вести себя так, как будто цель, загаданная в перспективу, находится на расстоянии шага."
+        textPartOne.text = infoTextPartOne
         textPartOne.numberOfLines = 0
         
         return textPartOne
@@ -37,48 +37,48 @@ class InfoViewController: UIViewController {
     
     private let textPartTwo: UILabel = {
         let textPartTwo = UILabel()
-        textPartTwo.text = "2. Выдержать 2 дня в прежнем состоянии самоконтроля."
+        textPartTwo.text = infoTextPartTwo
         textPartTwo.numberOfLines = 0
-    
+        
         return textPartTwo
     }()
     
     private let textPartThree: UILabel = {
         let textPartThree = UILabel()
-        textPartThree.text = "3. Отметить в дневнике первую неделю изменений и подвести первые итоги — что оказалось тяжело, что — легче, с чем еще предстоит серьезно бороться."
+        textPartThree.text = infoTextPartThree
         textPartThree.numberOfLines = 0
-    
+        
         return textPartThree
     }()
     
     private let textPartFour: UILabel = {
         let textPartFour = UILabel()
-        textPartFour.text = "4. Поздравить себя с прохождением первого серьезного порога в 21 день. За это время отказ от дурных наклонностей уже примет форму осознанного преодоления и человек сможет больше работать в сторону принятия положительных качеств."
+        textPartFour.text = infoTextPartFour
         textPartFour.numberOfLines = 0
-    
+        
         return textPartFour
     }()
     
     private let textPartFive: UILabel = {
         let textPartFive = UILabel()
-        textPartFive.text = "5. Держать планку 40 дней. Практикующий методику уже чувствует себя освободившимся от прошлого негатива и двигается в нужном направлении с хорошей динамикой."
+        textPartFive.text = infoTextPartFive
         textPartFive.numberOfLines = 0
-    
+        
         return textPartFive
     }()
     
     private let textPartSix: UILabel = {
         let textPartSix = UILabel()
-        textPartSix.text = "6. На 90-й день соблюдения техники все лишнее из «прошлой жизни» перестает напоминать о себе, и человек, оглянувшись назад, осознает себя полностью обновившимся."
+        textPartSix.text = infoTextPartSix
         textPartSix.numberOfLines = 0
-    
+        
         return textPartSix
     }()
     
     // Info text footer
     private let footNote: UILabel = {
         let footNote = UILabel()
-        footNote.text = "Источник: psychbook.ru"
+        footNote.text = footNoteText
         
         return footNote
     }()

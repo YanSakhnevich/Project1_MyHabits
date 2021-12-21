@@ -9,7 +9,7 @@ final class CheckboxButton: UIView {
         let checkMarkImageView = UIImageView()
         checkMarkImageView.contentMode = .scaleAspectFit
         checkMarkImageView.tintColor = .white
-        checkMarkImageView.image = UIImage(systemName: "checkmark")
+        checkMarkImageView.image = checkMarkImage
         
         checkMarkImageView.translatesAutoresizingMaskIntoConstraints = false
         return checkMarkImageView

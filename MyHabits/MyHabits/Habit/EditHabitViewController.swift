@@ -3,19 +3,18 @@ import UIKit
 class EditHabitViewController: UIViewController {
     
     public var checkerForDeletingHabitWithStyle = false
-    
     var delegatorForCalls: MakeACallFromEditToDetail?
     weak var delegatorForHabit: UpdatingCollectionDataDelegate?
-
+    
     public var habit: Habit
     
     // MARK: Initializations
     init(habit: Habit) {
-        
         self.habit = habit
         super.init(nibName: nil, bundle: nil)
+        
         setupNavBar()
-
+        
     }
     
     required init?(coder: NSCoder) {
@@ -26,9 +25,9 @@ class EditHabitViewController: UIViewController {
     
     private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm a"
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-    
+        dateFormatter.dateFormat = dateFormatText
+        dateFormatter.locale = Locale(identifier: dateFormatIDRu)
+        
         return dateFormatter
     }()
     
@@ -36,7 +35,7 @@ class EditHabitViewController: UIViewController {
     // Name Label
     private let nameLabel: UILabel = {
         let nameLabel = UILabel()
-        nameLabel.text = "НАЗВАНИЕ"
+        nameLabel.text = labelNameHabits
         nameLabel.font = .boldSystemFont(ofSize: 13)
         
         return nameLabel
@@ -46,8 +45,8 @@ class EditHabitViewController: UIViewController {
     private let newHabitNameTextField: UITextField = {
         let newHabitNameTextField = UITextField()
         newHabitNameTextField.font = .systemFont(ofSize: 17)
-        newHabitNameTextField.textColor = UIColor(named: "Custom Blue") ?? .systemBlue
-        newHabitNameTextField.placeholder = "Бегать по утрам, спать 8 часов и т.п."
+        newHabitNameTextField.textColor = customBlueColor ?? .systemBlue
+        newHabitNameTextField.placeholder = newHabitPlaceHolderText
         newHabitNameTextField.returnKeyType = .done
         
         return newHabitNameTextField
@@ -56,7 +55,7 @@ class EditHabitViewController: UIViewController {
     // Color Label
     private let colorLabel: UILabel = {
         let colorLabel = UILabel()
-        colorLabel.text = "ЦВЕТ"
+        colorLabel.text = colorLabelText
         colorLabel.font = .boldSystemFont(ofSize: 13)
         
         return colorLabel
@@ -75,9 +74,9 @@ class EditHabitViewController: UIViewController {
         newHabitColorPickerButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         newHabitColorPickerButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        newHabitColorPickerButton.backgroundColor = UIColor(named: "CustomOrange") ?? .systemOrange
+        newHabitColorPickerButton.backgroundColor = customOrangeColor ?? .systemOrange
         
-        newHabitColorPickerButton.layer.cornerRadius = 15
+        newHabitColorPickerButton.layer.cornerRadius = newHabitColorPickerButtonCorner
         
         newHabitColorPickerButton.isUserInteractionEnabled = true
         newHabitColorPickerButton.addTarget(self, action: #selector(didTappedOnColorPicker), for: .touchUpInside)
@@ -88,7 +87,7 @@ class EditHabitViewController: UIViewController {
     // Time Label
     private let timeLabel: UILabel = {
         let timeLabel = UILabel()
-        timeLabel.text = "ВРЕМЯ"
+        timeLabel.text = timeLabelTitle
         timeLabel.font = .boldSystemFont(ofSize: 13)
         
         return timeLabel
@@ -97,7 +96,7 @@ class EditHabitViewController: UIViewController {
     // New habit time text (text part)
     private let newHabitTimeTextLabel: UILabel = {
         let newHabitTimeTextLabel = UILabel()
-        newHabitTimeTextLabel.text = "Каждый день в "
+        newHabitTimeTextLabel.text = newHabitTimeText
         
         return newHabitTimeTextLabel
     }()
@@ -105,7 +104,7 @@ class EditHabitViewController: UIViewController {
     // New habit time text (time part)
     private let newHabitTimeDateLabel: UILabel = {
         let newHabitTimeDateLabel = UILabel()
-        newHabitTimeDateLabel.textColor = UIColor(named: "CustomPurple")
+        newHabitTimeDateLabel.textColor = customPurpleColor
         
         return newHabitTimeDateLabel
     }()
@@ -124,14 +123,14 @@ class EditHabitViewController: UIViewController {
     // Delete habit button
     let deleteHabitButton: UIButton = {
         let deleteHabitButton = UIButton(type: .system)
-        deleteHabitButton.setTitle("Удалить привычку", for: .normal)
+        deleteHabitButton.setTitle(deleteHabitTitle, for: .normal)
         deleteHabitButton.setTitleColor(.red, for: .normal)
         deleteHabitButton.addTarget(self, action: #selector(showDeleteAlert(_:)), for: .touchUpInside)
         
         return deleteHabitButton
     }()
     
-
+    
     
     // MARK:  - Functions
     // View did load
@@ -139,10 +138,11 @@ class EditHabitViewController: UIViewController {
         super.viewDidLoad()
         
         navigationItem.largeTitleDisplayMode = .never
-
+        
         checkerForDeletingHabitWithStyle = false
         
         view.backgroundColor = .white
+        
         habitColor = newHabitColorPickerButton.backgroundColor!
         
         newHabitNameTextField.delegate = self
@@ -151,7 +151,7 @@ class EditHabitViewController: UIViewController {
         newHabitColorPickerButton.backgroundColor = habit.color
         newHabitTimeDateLabel.text = dateFormatter.string(from: habit.date)
         newHabitTimeDatePicker.date = habit.date
-
+        
         setupViews()
     }
     
@@ -168,7 +168,7 @@ class EditHabitViewController: UIViewController {
             newHabitTimeDatePicker,
             deleteHabitButton
         )
-
+        
         let constraints = [
             nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: contentVerticalSpacer),
             nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: horizontalSpacer),
@@ -212,16 +212,16 @@ class EditHabitViewController: UIViewController {
         navBarAppearance.backgroundColor = .init(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
         navigationController?.navigationBar.backgroundColor = .white
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(saveTabBarButtonPressed))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: saveButtonTitle, style: .plain, target: self, action: #selector(saveTabBarButtonPressed))
         navigationItem.rightBarButtonItem?.style = .done
-
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelTabBarButtonPressed))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
-
+        
+        navigationItem.rightBarButtonItem?.tintColor = customPurpleColor ?? .systemPurple
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: canelButtonTitle, style: .plain, target: self, action: #selector(cancelTabBarButtonPressed))
+        navigationItem.leftBarButtonItem?.tintColor = customPurpleColor ?? .systemPurple
+        
         view.backgroundColor = .white
-        title = "Править"
+        title = editHabitViewControllerTitle
         
     }
     
@@ -230,33 +230,30 @@ class EditHabitViewController: UIViewController {
     @objc func saveTabBarButtonPressed(_ sender: UIBarButtonItem) {
         
         if ((newHabitNameTextField.text?.isEmpty) != Optional(false)) {
-            newHabitNameTextField.text = "Тут должно быть что-то грандиозное (но вы не указали что...)"
+            newHabitNameTextField.text = newHabitName
         }
         
         let editedHabit = Habit(
-            name: newHabitNameTextField.text ?? "NO DATA",
+            name: newHabitNameTextField.text ?? noDataText,
             date: newHabitTimeDatePicker.date,
             color: newHabitColorPickerButton.backgroundColor ?? habit.color
         )
         editedHabit.trackDates = habit.trackDates
         
         reloadInputViews()
+        
         if let index = HabitsStore.shared.habits.firstIndex(where: { $0 == self.habit }) {
             HabitsStore.shared.habits[index] = editedHabit
         }
         
-//        dismiss(animated: true) { [weak self] in
-        
         navigationController?.popToRootViewController(animated: true)
-
+        
         self.delegatorForCalls?.makeACall()
-//        }
     }
     
     // Cancel editing habit
     @objc func cancelTabBarButtonPressed(_ sender: UIBarButtonItem) {
         
-//        dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
         self.delegatorForHabit?.updateCollection()
     }
@@ -276,19 +273,17 @@ class EditHabitViewController: UIViewController {
         DispatchQueue.main.async {
             self.newHabitTimeDateLabel.text = self.dateFormatter.string(from: sender.date) }
         
-//        newHabitTimeDateLabel.text = dateFormatter.string(from: sender.date)
-        
     }
     
     // Show allert before deleting habit
     @objc func showDeleteAlert(_ sender: Any) {
-
-        let deleteAlertController = UIAlertController(title: "Удалить привычку?", message: "Вы хотите удалить привычку '\(habit.name)'?", preferredStyle: .alert)
-
-        let cancelDeleteAction = UIAlertAction(title: "Отмена", style: .default) { _ in
+        
+        let deleteAlertController = UIAlertController(title: deleteHabitTitle, message: "Вы хотите удалить привычку '\(habit.name)'?", preferredStyle: .alert)
+        
+        let cancelDeleteAction = UIAlertAction(title: cancelDeleteActionTitle, style: .default) { _ in
         }
-
-        let completeDeleteAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
+        
+        let completeDeleteAction = UIAlertAction(title: completeDeleteActionTitle, style: .destructive) { _ in
             if let oldHabit = HabitsStore.shared.habits.firstIndex(where: ({ $0.name == self.habit.name })) {
                 HabitsStore.shared.habits.remove(at: oldHabit )
             }
@@ -297,12 +292,6 @@ class EditHabitViewController: UIViewController {
             
             self.checkerForDeletingHabitWithStyle.toggle()
             
-//            self.dismiss(animated: true) { [weak self] in
-//                self?.delegatorForCalls?.makeACall()
-//            }
-//            self.dismiss(animated: true, completion: { [weak self] in
-//                self?.delegatorForCalls?.makeACall()
-//            })
         }
         
         deleteAlertController.addAction(cancelDeleteAction)
@@ -310,7 +299,7 @@ class EditHabitViewController: UIViewController {
         
         self.present(deleteAlertController, animated: true, completion: nil)
     }
-
+    
 }
 
 // MARK: - Extensions

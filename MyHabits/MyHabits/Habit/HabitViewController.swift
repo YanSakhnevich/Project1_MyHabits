@@ -3,14 +3,14 @@ import UIKit
 class HabitViewController: UIViewController {
     
     weak var dataDelegator: UpdatingCollectionDataDelegate?
-
+    
     private var habitColor: UIColor = .systemOrange
     
     private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm a"
-        dateFormatter.locale = Locale(identifier: "en_US")
-    
+        dateFormatter.dateFormat = dateFormatText
+        dateFormatter.locale = Locale(identifier: dateFormatID)
+        
         return dateFormatter
     }()
     
@@ -19,9 +19,8 @@ class HabitViewController: UIViewController {
     init (habit: Habit?) {
         super.init(nibName: nil, bundle: nil)
         self.habit = habit
-        setupNavBar()
-
         
+        setupNavBar()
     }
     
     required init?(coder: NSCoder) {
@@ -33,7 +32,7 @@ class HabitViewController: UIViewController {
     // Name Label
     private let nameLabel: UILabel = {
         let nameLabel = UILabel()
-        nameLabel.text = "НАЗВАНИЕ"
+        nameLabel.text = labelNameHabits
         nameLabel.font = .boldSystemFont(ofSize: 13)
         
         return nameLabel
@@ -43,8 +42,8 @@ class HabitViewController: UIViewController {
     private let newHabitNameTextField: UITextField = {
         let newHabitNameTextField = UITextField()
         newHabitNameTextField.font = .systemFont(ofSize: 17)
-        newHabitNameTextField.textColor = UIColor(named: "CustomBlue") ?? .systemBlue
-        newHabitNameTextField.placeholder = "Бегать по утрам, спать 8 часов и т.п."
+        newHabitNameTextField.textColor = customBlueColor ?? .systemBlue
+        newHabitNameTextField.placeholder = newHabitPlaceHolderText
         newHabitNameTextField.returnKeyType = .done
         
         return newHabitNameTextField
@@ -53,7 +52,7 @@ class HabitViewController: UIViewController {
     // Color Label
     private let colorLabel: UILabel = {
         let colorLabel = UILabel()
-        colorLabel.text = "ЦВЕТ"
+        colorLabel.text = colorLabelText
         colorLabel.font = .boldSystemFont(ofSize: 13)
         
         return colorLabel
@@ -72,7 +71,7 @@ class HabitViewController: UIViewController {
         newHabitColorPickerButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         newHabitColorPickerButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        newHabitColorPickerButton.backgroundColor = UIColor(named: "CustomOrange") ?? .systemOrange
+        newHabitColorPickerButton.backgroundColor = customOrangeColor ?? .systemOrange
         
         newHabitColorPickerButton.layer.cornerRadius = 15
         
@@ -85,7 +84,7 @@ class HabitViewController: UIViewController {
     // Time Label
     private let timeLabel: UILabel = {
         let timeLabel = UILabel()
-        timeLabel.text = "ВРЕМЯ"
+        timeLabel.text = timeLabelTitle
         timeLabel.font = .boldSystemFont(ofSize: 13)
         
         return timeLabel
@@ -94,7 +93,7 @@ class HabitViewController: UIViewController {
     // New habit time text (text part)
     private let newHabitTimeTextLabel: UILabel = {
         let newHabitTimeTextLabel = UILabel()
-        newHabitTimeTextLabel.text = "Каждый день в "
+        newHabitTimeTextLabel.text = newHabitTimeText
         
         return newHabitTimeTextLabel
     }()
@@ -102,7 +101,7 @@ class HabitViewController: UIViewController {
     // New habit time text (time part)
     private let newHabitTimeDateLabel: UILabel = {
         let newHabitTimeDateLabel = UILabel()
-        newHabitTimeDateLabel.textColor = UIColor(named: "CustomPurple")
+        newHabitTimeDateLabel.textColor = customPurpleColor
         
         return newHabitTimeDateLabel
     }()
@@ -113,7 +112,7 @@ class HabitViewController: UIViewController {
         let newHabitTimeDatePicker = UIDatePicker()
         newHabitTimeDatePicker.datePickerMode = .time
         newHabitTimeDatePicker.preferredDatePickerStyle = .wheels
-        newHabitTimeDatePicker.locale = Locale(identifier: "en_US")
+        newHabitTimeDatePicker.locale = Locale(identifier: dateFormatID)
         
         newHabitTimeDatePicker.addTarget(self, action: #selector(dateHasBeenChenged), for: .valueChanged)
         
@@ -134,8 +133,6 @@ class HabitViewController: UIViewController {
         newHabitNameTextField.delegate = self
         
         navigationItem.largeTitleDisplayMode = .never
-
-
         
         setupViews()
         
@@ -143,7 +140,8 @@ class HabitViewController: UIViewController {
         self.view.addGestureRecognizer(tapGesture)
     }
     
-    
+    // Tap
+
     @objc func tap() {
         newHabitNameTextField.resignFirstResponder()
     }
@@ -161,7 +159,7 @@ class HabitViewController: UIViewController {
             newHabitTimeDateLabel,
             newHabitTimeDatePicker
         )
-    
+        
         let constraints = [
             nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: contentVerticalSpacer),
             nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: horizontalSpacer),
@@ -196,34 +194,34 @@ class HabitViewController: UIViewController {
     
     // Setup navigation bar
     private func setupNavBar() {
-
+        
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.configureWithOpaqueBackground()
         navBarAppearance.backgroundColor = .init(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
         navigationController?.navigationBar.backgroundColor = .white
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сохранить", style: .plain, target: self, action: #selector(saveTabBarButtonPressed))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: saveButtonTitle, style: .plain, target: self, action: #selector(saveTabBarButtonPressed))
         navigationItem.rightBarButtonItem?.style = .done
-
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(cancelTabBarButtonPressed))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "CustomPurple") ?? .systemPurple
+        
+        navigationItem.rightBarButtonItem?.tintColor = customPurpleColor ?? .systemPurple
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: canelButtonTitle, style: .plain, target: self, action: #selector(cancelTabBarButtonPressed))
+        navigationItem.leftBarButtonItem?.tintColor = customPurpleColor ?? .systemPurple
         
         view.backgroundColor = .white
-        title = "Создать"
-
+        title = habitViewControllerTitle
+        
     }
     
     // MARK: - Actions
     // Saving new habit
     @objc func saveTabBarButtonPressed(_ sender: UIBarButtonItem) {
         
-        if ((newHabitNameTextField.text?.isEmpty) != Optional(false)) { newHabitNameTextField.text = "Тут должно быть что-то грандиозное (но вы не указали что...)"
+        if ((newHabitNameTextField.text?.isEmpty) != Optional(false)) { newHabitNameTextField.text = newHabitName
         }
         
         let newHabit = Habit(
-            name: newHabitNameTextField.text ?? "NO DATA",
+            name: newHabitNameTextField.text ?? noDataText,
             date: newHabitTimeDatePicker.date,
             color: habitColor
         )
@@ -232,7 +230,7 @@ class HabitViewController: UIViewController {
         reloadInputViews()
         
         navigationController?.popViewController(animated: true)
-            self.dataDelegator?.updateCollection()
+        self.dataDelegator?.updateCollection()
         
     }
     
@@ -256,9 +254,8 @@ class HabitViewController: UIViewController {
     @objc private func dateHasBeenChenged(_ sender: UIDatePicker) {
         
         newHabitTimeDateLabel.text = dateFormatter.string(from: sender.date)
-    
+        
     }
-    
 }
 
 // MARK: - Extensions

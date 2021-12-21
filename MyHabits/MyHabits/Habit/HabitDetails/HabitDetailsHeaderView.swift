@@ -1,7 +1,7 @@
 import UIKit
 
 class HabitDetailsHeaderView: UITableViewHeaderFooterView {
-
+    
     // MARK: - Data from parent
     public var titleLabel: String? {
         didSet {
@@ -14,7 +14,7 @@ class HabitDetailsHeaderView: UITableViewHeaderFooterView {
     private let habitActivityLabel: UILabel = {
         let habitActivityLabel = UILabel()
         
-        habitActivityLabel.text = "АКТИВНОСТЬ"
+        habitActivityLabel.text = habitActivityLabelText
         habitActivityLabel.font = .systemFont(ofSize: 13)
         habitActivityLabel.textColor = .systemGray
         
@@ -37,7 +37,7 @@ class HabitDetailsHeaderView: UITableViewHeaderFooterView {
     // Setup views
     func setupViews() {
         
-        contentView.backgroundColor = UIColor(named: "Custom White")
+        contentView.backgroundColor = customWhiteColor
         contentView.addSubview(habitActivityLabel)
         
         let constraints = [

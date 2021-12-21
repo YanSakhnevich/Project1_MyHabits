@@ -14,7 +14,7 @@ class HabitDetailsTableViewCell: UITableViewCell {
     public let checkMarkImage: UIImageView = {
         let checkMarkImage = UIImageView()
         checkMarkImage.tintColor = .systemPurple
-        checkMarkImage.image = UIImage(systemName: "checkmark")
+        checkMarkImage.image = checkMarkPic
         checkMarkImage.isHidden = true
         
         return checkMarkImage
@@ -57,5 +57,5 @@ class HabitDetailsTableViewCell: UITableViewCell {
         
         NSLayoutConstraint.activate(constraints)
     }
-   
+    
 }
