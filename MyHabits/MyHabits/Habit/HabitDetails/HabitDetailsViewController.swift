@@ -80,6 +80,9 @@ class HabitDetailsViewController: UIViewController {
     @objc func editThisHabit() {
         
         let editHabitViewController = EditHabitViewController(habit: habit)
+//        let habitVC = HabitViewController(habit: habit)
+//        habitVC.modalPresentationStyle = .overFullScreen
+//        navigationController?.pushViewController(habitVC, animated: true)
         
         editHabitViewController.modalPresentationStyle = .overFullScreen
         navigationController?.pushViewController(editHabitViewController, animated: true)

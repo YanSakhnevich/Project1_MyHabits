@@ -213,24 +213,45 @@ class HabitViewController: UIViewController {
         
     }
     
+    var delegatorForCalls: MakeACallFromEditToDetail?
+
     // MARK: - Actions
     // Saving new habit
     @objc func saveTabBarButtonPressed(_ sender: UIBarButtonItem) {
-        
-        if ((newHabitNameTextField.text?.isEmpty) != Optional(false)) { newHabitNameTextField.text = newHabitName
-        }
-        
+    
         let newHabit = Habit(
             name: newHabitNameTextField.text ?? noDataText,
             date: newHabitTimeDatePicker.date,
             color: habitColor
         )
         let store = HabitsStore.shared
-        store.habits.append(newHabit)
-        reloadInputViews()
         
-        navigationController?.popViewController(animated: true)
-        self.dataDelegator?.updateCollection()
+        if ((newHabitNameTextField.text?.isEmpty) != Optional(false)) {
+            newHabitNameTextField.text = newHabitName
+        }
+        if let habit = habit {
+            let editedHabit = Habit(
+                name: newHabitNameTextField.text ?? noDataText,
+                date: newHabitTimeDatePicker.date,
+                color: newHabitColorPickerButton.backgroundColor ?? habit.color
+            )
+            editedHabit.trackDates = habit.trackDates
+            
+            reloadInputViews()
+            
+            if let index = HabitsStore.shared.habits.firstIndex(where: { $0 == self.habit }) {
+                HabitsStore.shared.habits[index] = editedHabit
+            }
+            
+            navigationController?.popToRootViewController(animated: true)
+            
+            self.delegatorForCalls?.makeACall()
+        } else {
+            store.habits.append(newHabit)
+            navigationController?.popViewController(animated: true)
+            self.dataDelegator?.updateCollection()
+            reloadInputViews()
+        }
         
     }
     

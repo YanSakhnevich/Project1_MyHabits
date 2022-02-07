@@ -1,5 +1,6 @@
 import UIKit
 
+
 class HabitsViewController: UIViewController {
     
     private var habitDetailsViewController: HabitDetailsViewController?
@@ -44,9 +45,9 @@ class HabitsViewController: UIViewController {
         
         
         view.backgroundColor = .white
-        title = habitsViewControllerTitle
         
         view.addSubview(collectionView)
+        
         
         let constraints = [
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -170,17 +171,11 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if indexPath.section != 0 {
-            let habit = HabitsStore.shared.habits[indexPath.item]
-            habitDetailsViewController = HabitDetailsViewController(habit: habit)
-            
-            if habitDetailsViewController != nil {
                 let habit = HabitsStore.shared.habits[indexPath.item]
                 let habitDetailsVc = HabitDetailsViewController(habit: habit)
                 habitDetailsVc.navigationItem.title = habit.name
                 habitDetailsVc.callerFromDetailToHabits = self
                 navigationController?.pushViewController(habitDetailsVc, animated: true)
-                
-            }
         }
     }
     
