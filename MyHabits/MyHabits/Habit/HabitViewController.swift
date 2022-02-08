@@ -3,7 +3,11 @@ import UIKit
 class HabitViewController: UIViewController {
     
     weak var dataDelegator: UpdatingCollectionDataDelegate?
-    
+    weak var delegatorForHabit: UpdatingCollectionDataDelegate?
+    var delegatorForCalls: MakeACallFromEditToDetail?
+    public var checkerForDeletingHabitWithStyle = false
+
+
     private var habitColor: UIColor = .systemOrange
     
     private let dateFormatter: DateFormatter = {
@@ -81,6 +85,16 @@ class HabitViewController: UIViewController {
         return newHabitColorPickerButton
     }()
     
+    let deleteHabitButton: UIButton = {
+        let deleteHabitButton = UIButton(type: .system)
+        deleteHabitButton.setTitle(deleteHabitTitle, for: .normal)
+        deleteHabitButton.setTitleColor(.red, for: .normal)
+        deleteHabitButton.addTarget(self, action: #selector(showDeleteAlert(_:)), for: .touchUpInside)
+        deleteHabitButton.isHidden = true
+
+        return deleteHabitButton
+    }()
+    
     // Time Label
     private let timeLabel: UILabel = {
         let timeLabel = UILabel()
@@ -138,6 +152,7 @@ class HabitViewController: UIViewController {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))
         self.view.addGestureRecognizer(tapGesture)
+        
     }
     
     // Tap
@@ -157,7 +172,8 @@ class HabitViewController: UIViewController {
             timeLabel,
             newHabitTimeTextLabel,
             newHabitTimeDateLabel,
-            newHabitTimeDatePicker
+            newHabitTimeDatePicker,
+            deleteHabitButton
         )
         
         let constraints = [
@@ -186,7 +202,10 @@ class HabitViewController: UIViewController {
             newHabitTimeDatePicker.topAnchor.constraint(equalTo: newHabitTimeTextLabel.bottomAnchor, constant: bigVerticalSpacer),
             newHabitTimeDatePicker.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             newHabitTimeDatePicker.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            newHabitTimeDatePicker.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+            newHabitTimeDatePicker.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
+            
+            deleteHabitButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -18),
+            deleteHabitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ]
         
         NSLayoutConstraint.activate(constraints)
@@ -213,7 +232,6 @@ class HabitViewController: UIViewController {
         
     }
     
-    var delegatorForCalls: MakeACallFromEditToDetail?
 
     // MARK: - Actions
     // Saving new habit
@@ -253,6 +271,31 @@ class HabitViewController: UIViewController {
             reloadInputViews()
         }
         
+    }
+    
+    @objc func showDeleteAlert(_ sender: Any) {
+
+        guard let habit = habit else { return }
+        let deleteAlertController = UIAlertController(title: deleteHabitTitle, message: "Вы хотите удалить привычку '\(habit.name)'?", preferredStyle: .alert)
+
+        let cancelDeleteAction = UIAlertAction(title: cancelDeleteActionTitle, style: .default) { _ in
+        }
+
+        let completeDeleteAction = UIAlertAction(title: completeDeleteActionTitle, style: .destructive) { _ in
+            if let oldHabit = HabitsStore.shared.habits.firstIndex(where: ({ $0.name == habit.name })) {
+                HabitsStore.shared.habits.remove(at: oldHabit )
+            }
+            self.navigationController?.popToRootViewController(animated: true)
+            self.delegatorForHabit?.updateCollection()
+
+            self.checkerForDeletingHabitWithStyle.toggle()
+
+        }
+
+        deleteAlertController.addAction(cancelDeleteAction)
+        deleteAlertController.addAction(completeDeleteAction)
+
+        self.present(deleteAlertController, animated: true, completion: nil)
     }
     
     // Cancel creating new habit

@@ -19,7 +19,7 @@ class HabitDetailsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var editHabitViewController = EditHabitViewController(habit: habit)
+    private lazy var habitViewController = HabitViewController(habit: habit)
     
     
     // MARK: - Content
@@ -43,7 +43,7 @@ class HabitDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        editHabitViewController.delegatorForCalls = self
+        habitViewController.delegatorForCalls = self
         
         view.backgroundColor = .systemGray6
         habitDetailTableView.backgroundColor = .systemGray6
@@ -69,7 +69,7 @@ class HabitDetailsViewController: UIViewController {
     // Little crutch for close current view when habit was deleted
     private func checkingForDeleting() {
         
-        if editHabitViewController.checkerForDeletingHabitWithStyle {
+        if habitViewController.checkerForDeletingHabitWithStyle {
             navigationController?.popViewController(animated: true)
             print("it worked")
         }
@@ -79,13 +79,12 @@ class HabitDetailsViewController: UIViewController {
     // Open editing view for this habit
     @objc func editThisHabit() {
         
-        let editHabitViewController = EditHabitViewController(habit: habit)
-//        let habitVC = HabitViewController(habit: habit)
-//        habitVC.modalPresentationStyle = .overFullScreen
-//        navigationController?.pushViewController(habitVC, animated: true)
+        let habitViewController = HabitViewController(habit: habit)
+        habitViewController.deleteHabitButton.isHidden = false
+
         
-        editHabitViewController.modalPresentationStyle = .overFullScreen
-        navigationController?.pushViewController(editHabitViewController, animated: true)
+        habitViewController.modalPresentationStyle = .overFullScreen
+        navigationController?.pushViewController(habitViewController, animated: true)
     }
 }
 
